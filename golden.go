@@ -12,8 +12,6 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/josharian/txtarfs"
-	"golang.org/x/tools/txtar"
 )
 
 // Diff compares between the given data and a golden file which is stored in testdata as name+".golden".
@@ -108,14 +106,4 @@ func RemoveAll(t *testing.T, testdata string) {
 	if err != nil {
 		t.Fatal("unexpected error", err)
 	}
-}
-
-// Txtar converts a directory as a txtar format.
-func Txtar(t *testing.T, dir string) string {
-	t.Helper()
-	ar, err := txtarfs.From(os.DirFS(dir))
-	if err != nil {
-		t.Fatal("unexpected error", err)
-	}
-	return string(txtar.Format(ar))
 }
