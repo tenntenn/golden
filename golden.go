@@ -31,6 +31,7 @@ func Diff(t *testing.T, testdata, name string, data interface{}) string {
 }
 
 func readAll(t *testing.T, data interface{}) string {
+	t.Helper()
 	r := newReader(t, data)
 	b, err := io.ReadAll(r)
 	if err != nil {
