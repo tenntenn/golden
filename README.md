@@ -42,7 +42,7 @@ func Test(t *testing.T) {
 		t.Fatal("unexpected error:", err)
 	}
 
-	got := golden.Txtar(dir)
+	got := golden.Txtar(t, dir)
 
 	if flagUpdate {
 		golden.Update(t, "testdata", "mytest", got)
