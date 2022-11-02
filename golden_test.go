@@ -18,7 +18,7 @@ func TestDiff(t *testing.T) {
 	cases := []struct {
 		name    string
 		want    string
-		got     interface{}
+		got     any
 		hasDiff bool
 	}{
 		{"string-nodiff", "hello", "hello", false},

@@ -43,13 +43,7 @@ func Test(t *testing.T) {
 	}
 
 	got := golden.Txtar(dir)
-
-	if flagUpdate {
-		golden.Update(t, "testdata", "mytest", got)
-		return
-	}
-
-	if diff := golden.Diff(t, "testdata", "mytest", got); diff != "" {
+	if diff := golden.Check(t, flagUpdate, "testdata", "mytest", got); diff != "" {
 		t.Error(diff)
 	}
 }
