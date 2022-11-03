@@ -14,23 +14,51 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-// Diff compares between the given data and a golden file which is stored in testdata as name+".golden".
-// Diff returns difference of them.
-func Diff(t *testing.T, testdata, name string, data interface{}) string {
+// Check updates a golden file when update is true otherwise compares data with the exsiting golden file by DiffWithOpts.
+// If update is true Check does not compare and just return "".
+//
+//	var flagUpdate bool
+//
+//	func init() {
+//		flag.BoolVar(&flagUpdate, "update", false, "update golden files")
+//	}
+//
+//	func Test(t *testing.T) {
+//		got := doSomething()
+//		if diff := golden.Check(t, flagUpdate, "testdata", t.Name(), got); diff != "" {
+//			t.Error(diff)
+//		}
+//	}
+func Check(t *testing.T, update bool, testdata, name string, data any, opts ...cmp.Option) string {
 	t.Helper()
-	path := filepath.Join(testdata, name+".golden")
-	golden, err := os.Open(path)
-	if err != nil {
-		t.Fatal("unexpected error:", err)
+	if update {
+		Update(t, testdata, name, data)
+		return ""
 	}
-	defer golden.Close()
-
-	want, got := readAll(t, golden), readAll(t, data)
-
-	return cmp.Diff(want, got)
+	return DiffWithOpts(t, testdata, name, data, opts...)
 }
 
-func readAll(t *testing.T, data interface{}) string {
+// DiffWithOpts compares between the given data and a golden file which is stored in testdata as name+".golden".
+// DiffWithOpts returns difference of them.
+// DiffWithOpts uses [go-cmp] to compare.
+//
+// [go-cmp]: https://pkg.go.dev/github.com/google/go-cmp/cmp
+func DiffWithOpts(t *testing.T, testdata, name string, data any, opts ...cmp.Option) string {
+	t.Helper()
+	return New(t, false, testdata, name, opts...).Check("", data)
+}
+
+// Diff compares between the given data and a golden file which is stored in testdata as name+".golden".
+// Diff returns difference of them.
+// Diff uses [go-cmp] to compare.
+//
+// [go-cmp]: https://pkg.go.dev/github.com/google/go-cmp/cmp
+func Diff(t *testing.T, testdata, name string, data any) string {
+	t.Helper()
+	return DiffWithOpts(t, testdata, name, data, nil)
+}
+
+func readAll(t TestingT, data any) string {
 	t.Helper()
 	r := newReader(t, data)
 	b, err := io.ReadAll(r)
@@ -40,7 +68,7 @@ func readAll(t *testing.T, data interface{}) string {
 	return string(b)
 }
 
-func newReader(t *testing.T, data interface{}) io.Reader {
+func newReader(t TestingT, data any) io.Reader {
 	t.Helper()
 	switch data := data.(type) {
 	case io.Reader:
@@ -66,22 +94,9 @@ func newReader(t *testing.T, data interface{}) io.Reader {
 
 // Update updates a golden file with the given data.
 // The golden file saved as name+".golden" in testdata.
-func Update(t *testing.T, testdata, name string, data interface{}) {
+func Update(t *testing.T, testdata, name string, data any) {
 	t.Helper()
-	path := filepath.Join(testdata, name+".golden")
-	f, err := os.Create(path)
-	if err != nil {
-		t.Fatal("unexpected error:", err)
-	}
-
-	r := newReader(t, data)
-	if _, err := io.Copy(f, r); err != nil {
-		t.Fatal("unexpected error:", err)
-	}
-
-	if err := f.Close(); err != nil {
-		t.Fatal("unexpected error:", err)
-	}
+	_ = New(t, true, testdata, name).Check("", data)
 }
 
 // RemoveAll removes all golden files which has .golden extention and is under testdata.

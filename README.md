@@ -42,14 +42,8 @@ func Test(t *testing.T) {
 		t.Fatal("unexpected error:", err)
 	}
 
-	got := golden.Txtar(t, dir)
-
-	if flagUpdate {
-		golden.Update(t, "testdata", "mytest", got)
-		return
-	}
-
-	if diff := golden.Diff(t, "testdata", "mytest", got); diff != "" {
+	got := golden.Txtar(dir)
+	if diff := golden.Check(t, flagUpdate, "testdata", "mytest", got); diff != "" {
 		t.Error(diff)
 	}
 }
