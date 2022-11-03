@@ -92,36 +92,3 @@ func (c *Checker) updateFile(path string, data any) {
 		c.testingT.Fatal("unexpected error:", err)
 	}
 }
-
-// CheckAll do golden file tests for multiple data.
-// CheckAll calls [Checker.Check] for each data and the handler function with the return value of Check.
-// The handler should not call t.Helper because CheckAll calls it.
-//
-//	var flagUpdate bool
-//
-//	func init() {
-//		flag.BoolVar(&flagUpdate, "update", false, "update golden files")
-//	}
-//
-//	func Test(t *testing.T) {
-//		var got1 bytes.Buffer
-//		got2 := doSomething(&got1)
-//		c := golden.New(t, flagUpdate, "testdata", t.Name())
-//		c.CheckAll(map[string]any{
-//			"_got1": &got1,
-//			"_got2": got2,
-//		}, func(diff string) {
-//			if diff != "" {
-//				t.Error(diff)
-//			}
-//		})
-//	}
-func (c *Checker) CheckAll(suffixToData map[string]any, handler func(diff string)) {
-	c.testingT.Helper()
-	for suffix, data := range suffixToData {
-		if diff := c.Check(suffix, data); diff != "" {
-			c.testingT.Helper()
-			handler(diff)
-		}
-	}
-}
