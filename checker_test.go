@@ -7,13 +7,7 @@ import (
 	"github.com/tenntenn/golden"
 )
 
-type marshaler string
-
-func (m marshaler) MarshalText() (text []byte, err error) {
-	return []byte(m), nil
-}
-
-func TestDiff(t *testing.T) {
+func TestChecker_Check(t *testing.T) {
 	t.Parallel()
 	cases := map[string]struct {
 		want    string
@@ -38,13 +32,19 @@ func TestDiff(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			testdata := t.TempDir()
-			golden.Update(t, testdata, name, tt.want)
-			diff := golden.Diff(t, testdata, name, tt.got)
+
+			// only update
+			diff1 := golden.New(t, true, testdata, name).Check("_check", tt.want)
+			if diff1 != "" {
+				t.Error("there are some unexpected differences:", diff1)
+			}
+
+			diff2 := golden.New(t, false, testdata, name).Check("_check", tt.got)
 			switch {
-			case diff == "" && tt.hasDiff:
+			case diff2 == "" && tt.hasDiff:
 				t.Error("there are any expected differences")
-			case diff != "" && !tt.hasDiff:
-				t.Error("there are some unexpected differences:", diff)
+			case diff2 != "" && !tt.hasDiff:
+				t.Error("there are some unexpected differences:", diff2)
 			}
 		})
 	}
