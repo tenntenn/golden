@@ -1,11 +1,20 @@
 package golden_test
 
 import (
+	"flag"
 	"strings"
 	"testing"
 
 	"github.com/tenntenn/golden"
 )
+
+var (
+	flagUpdate bool
+)
+
+func init() {
+	flag.BoolVar(&flagUpdate, "update", false, "update golden files")
+}
 
 type marshaler string
 
