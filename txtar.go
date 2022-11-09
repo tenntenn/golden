@@ -107,6 +107,27 @@ func TxtarWith(t *testing.T, nameAndData ...string) string {
 	return string(txtar.Format(ar))
 }
 
+// TxtarJoin appends a txtar format values.
+// Its file list are sorted by the file path.
+func TxtarJoin(t TestingT, txtars ...string) string {
+	t.Helper()
+
+	if len(txtars) == 0 {
+		return ""
+	}
+
+	var ar txtar.Archive
+
+	for _, txtarStr := range txtars {
+		_ar := txtar.Parse([]byte(txtarStr))
+		ar.Comment = append(ar.Comment, _ar.Comment...)
+		ar.Files = append(ar.Files, _ar.Files...)
+	}
+
+	sortTxtar(&ar)
+	return string(txtar.Format(&ar))
+}
+
 func sortTxtar(ar *txtar.Archive) {
 	sort.Slice(ar.Files, func(i, j int) bool {
 		return ar.Files[i].Name < ar.Files[j].Name
