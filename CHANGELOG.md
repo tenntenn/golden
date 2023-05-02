@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.4.1](https://github.com/tenntenn/golden/compare/v0.4.0...v0.4.1) - 2023-05-02
+- Fix struct diff using JSON by @tenntenn in https://github.com/tenntenn/golden/pull/12
+
 ## [v0.4.0](https://github.com/tenntenn/golden/compare/v0.3.0...v0.4.0) - 2022-11-09
 - Add TxtarJoin by @tenntenn in https://github.com/tenntenn/golden/pull/8
 
