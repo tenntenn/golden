@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.5.1](https://github.com/tenntenn/golden/compare/v0.5.0...v0.5.1) - 2023-05-02
+- Fix for inner struct field by @tenntenn in https://github.com/tenntenn/golden/pull/14
+- fix README by @takuoki in https://github.com/tenntenn/golden/pull/11
+
 ## [v0.4.0](https://github.com/tenntenn/golden/compare/v0.3.0...v0.4.0) - 2022-11-09
 - Add TxtarJoin by @tenntenn in https://github.com/tenntenn/golden/pull/8
 
