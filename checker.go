@@ -2,6 +2,7 @@ package golden
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"os"
 	"path/filepath"
@@ -75,21 +76,39 @@ func (c *Checker) Check(suffix string, data any) (diff string) {
 	defer golden.Close()
 
 	wantStr := readAll(c.testingT, c.JSONIdent, golden)
+	if !c.isJSON(wantStr) {
+		gotStr := readAll(c.testingT, c.JSONIdent, data)
+		return cmp.Diff(wantStr, gotStr, c.opts...)
+	}
 
 	got := reflect.ValueOf(data)
-	if got.Kind() != reflect.Pointer || got.Elem().Kind() != reflect.Struct {
-		gotStr := readAll(c.testingT, c.JSONIdent, data)
-		return cmp.Diff(wantStr, gotStr, c.opts...)
-	}
-
-	want := reflect.New(got.Elem().Type())
+	want := reflect.New(got.Type())
 	dec := json.NewDecoder(strings.NewReader(wantStr))
 	if err := dec.Decode(want.Interface()); err != nil {
+		c.testingT.Fatal("unexpected error:", err)
+	}
+
+	if diff := cmp.Diff(want.Elem().Interface(), data, c.opts...); diff != "" {
+		// retry with string
 		gotStr := readAll(c.testingT, c.JSONIdent, data)
 		return cmp.Diff(wantStr, gotStr, c.opts...)
 	}
 
-	return cmp.Diff(want.Interface(), data, c.opts...)
+	return ""
+}
+
+func (c *Checker) isJSON(s string) bool {
+	var v any
+	err := json.NewDecoder(strings.NewReader(s)).Decode(&v)
+
+	if errors.Is(err, io.EOF) {
+		return false
+	}
+
+	if serr := (*json.SyntaxError)(nil); errors.As(err, &serr) {
+		return false
+	}
+	return true
 }
 
 func (c *Checker) updateFile(path string, data any) {
