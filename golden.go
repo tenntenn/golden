@@ -58,9 +58,9 @@ func Diff(t *testing.T, testdata, name string, data any) string {
 	return DiffWithOpts(t, testdata, name, data, nil)
 }
 
-func readAll(t TestingT, data any) string {
+func readAll(t TestingT, jsonIndent bool, data any) string {
 	t.Helper()
-	r := newReader(t, data)
+	r := newReader(t, jsonIndent, data)
 	b, err := io.ReadAll(r)
 	if err != nil {
 		t.Fatal("unexpected error:", err)
@@ -68,7 +68,7 @@ func readAll(t TestingT, data any) string {
 	return string(b)
 }
 
-func newReader(t TestingT, data any) io.Reader {
+func newReader(t TestingT, jsonIndent bool, data any) io.Reader {
 	t.Helper()
 	switch data := data.(type) {
 	case io.Reader:
@@ -85,7 +85,11 @@ func newReader(t TestingT, data any) io.Reader {
 		return bytes.NewReader(b)
 	default:
 		var buf bytes.Buffer
-		if err := json.NewEncoder(&buf).Encode(data); err != nil {
+		enc := json.NewEncoder(&buf)
+		if jsonIndent {
+			enc.SetIndent("", "\t")
+		}
+		if err := enc.Encode(data); err != nil {
 			t.Fatal("unexpected error:", err)
 		}
 		return &buf
