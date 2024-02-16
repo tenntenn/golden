@@ -29,17 +29,22 @@ func TestDiff(t *testing.T) {
 		got     any
 		hasDiff bool
 	}{
-		"string-nodiff":    {"hello", "hello", false},
-		"bytes-nodiff":     {"hello", []byte("hello"), false},
-		"reader-nodiff":    {"hello", strings.NewReader("hello"), false},
-		"json-nodiff":      {"{\"S\":\"hello\"}\n", struct{ S string }{S: "hello"}, false},
-		"marshaler-nodiff": {"hello", marshaler("hello"), false},
+		"string-nodiff":       {"hello", "hello", false},
+		"bytes-nodiff":        {"hello", []byte("hello"), false},
+		"reader-nodiff":       {"hello", strings.NewReader("hello"), false},
+		"json-nodiff":         {"{\"S\":\"hello\"}\n", struct{ S string }{S: "hello"}, false},
+		"marshaler-nodiff":    {"hello", marshaler("hello"), false},
+		"empty-nodiff":        {"", "", false},
+		"number-nodiff":       {"3", "3", false},
+		"number-start-nodiff": {"3 bytes", "3 bytes", false},
 
-		"string-diff":    {"Hello", "hello", true},
-		"bytes-diff":     {"Hello", []byte("hello"), true},
-		"reader-diff":    {"Hello", strings.NewReader("hello"), true},
-		"json-diff":      {"{\"S\":\"Hello\"}\n", struct{ S string }{S: "hello"}, true},
-		"marshaler-diff": {"Hello", marshaler("hello"), true},
+		"string-diff":       {"Hello", "hello", true},
+		"bytes-diff":        {"Hello", []byte("hello"), true},
+		"reader-diff":       {"Hello", strings.NewReader("hello"), true},
+		"json-diff":         {"{\"S\":\"Hello\"}\n", struct{ S string }{S: "hello"}, true},
+		"marshaler-diff":    {"Hello", marshaler("hello"), true},
+		"number-diff":       {"3", "4", true},
+		"number-start-diff": {"3 bytes", "4 bytes", true},
 	}
 
 	for name, tt := range cases {
