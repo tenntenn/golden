@@ -21,20 +21,20 @@ func TestChecker_Check(t *testing.T) {
 		hasDiff bool
 		opts    []cmp.Option
 	}{
-		"string-nodiff":       {"hello", "hello", false, nil},
-		"bytes-nodiff":        {"hello", []byte("hello"), false, nil},
-		"reader-nodiff":       {"hello", strings.NewReader("hello"), false, nil},
-		"json-nodiff":         {"{\"S\":\"hello\"}\n", struct{ S string }{S: "hello"}, false, nil},
-		"marshaler-nodiff":    {"hello", marshaler("hello"), false, nil},
-		"ignore-field-nodiff": {`{"N":100, "M":200}`, &T{N: 100, M: 300}, false, []cmp.Option{cmpopts.IgnoreFields(T{}, "M")}},
+		"string-nodiff":                    {"hello", "hello", false, nil},
+		"bytes-nodiff":                     {"hello", []byte("hello"), false, nil},
+		"reader-nodiff":                    {"hello", strings.NewReader("hello"), false, nil},
+		"json-nodiff":                      {"{\"S\":\"hello\"}\n", struct{ S string }{S: "hello"}, false, nil},
+		"marshaler-nodiff":                 {"hello", marshaler("hello"), false, nil},
+		"ignore-field-nodiff":              {`{"N":100, "M":200}`, &T{N: 100, M: 300}, false, []cmp.Option{cmpopts.IgnoreFields(T{}, "M")}},
 		"ignore-inner-struct-field-nodiff": {`[{"N":100, "M":200}]`, []*T{{N: 100, M: 300}}, false, []cmp.Option{cmpopts.IgnoreFields(T{}, "M")}},
 
-		"string-diff":    {"Hello", "hello", true, nil},
-		"bytes-diff":     {"Hello", []byte("hello"), true, nil},
-		"reader-diff":    {"Hello", strings.NewReader("hello"), true, nil},
-		"json-diff":      {"{\"S\":\"Hello\"}\n", struct{ S string }{S: "hello"}, true, nil},
-		"marshaler-diff": {"Hello", marshaler("hello"), true, nil},
-		"ignore-field-diff": {`{"N":100, "M":200}`, &T{N: 100, M: 300}, true, nil},
+		"string-diff":                    {"Hello", "hello", true, nil},
+		"bytes-diff":                     {"Hello", []byte("hello"), true, nil},
+		"reader-diff":                    {"Hello", strings.NewReader("hello"), true, nil},
+		"json-diff":                      {"{\"S\":\"Hello\"}\n", struct{ S string }{S: "hello"}, true, nil},
+		"marshaler-diff":                 {"Hello", marshaler("hello"), true, nil},
+		"ignore-field-diff":              {`{"N":100, "M":200}`, &T{N: 100, M: 300}, true, nil},
 		"ignore-inner-struct-field-diff": {`[{"N":100, "M":200}]`, []*T{{N: 100, M: 300}}, true, nil},
 	}
 
