@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"strconv"
 	"strings"
 
 	"github.com/google/go-cmp/cmp"
@@ -108,6 +109,14 @@ func (c *Checker) isJSON(s string) bool {
 	if serr := (*json.SyntaxError)(nil); errors.As(err, &serr) {
 		return false
 	}
+
+	if len(s) > 0 {
+		_, err := strconv.Atoi(s[0:1])
+		if err == nil {
+			return false
+		}
+	}
+
 	return true
 }
 
