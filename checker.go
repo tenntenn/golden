@@ -112,8 +112,9 @@ func (c *Checker) isJSON(s string) bool {
 		return false
 	}
 
-	if len(s) > 0 {
-		_, err := strconv.Atoi(s[0:1])
+	trimed := strings.TrimSpace(s)
+	if len(trimed) > 0 {
+		_, err := strconv.Atoi(trimed[0:1])
 		if err == nil {
 			return false
 		}
