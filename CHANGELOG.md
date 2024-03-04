@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.5.4](https://github.com/tenntenn/golden/compare/v0.5.3...v0.5.4) - 2024-03-04
+- isJSON is test helper by @k1LoW in https://github.com/tenntenn/golden/pull/21
+- If a string to be interpreted as JSON begins with a number, it is not considered JSON. by @k1LoW in https://github.com/tenntenn/golden/pull/22
+- Support for comparison with JSON acquired with string type by @k1LoW in https://github.com/tenntenn/golden/pull/24
+
 ## [v0.5.3](https://github.com/tenntenn/golden/compare/v0.5.2...v0.5.3) - 2024-03-04
 - Support for comparison with JSON acquired with []byte type by @k1LoW in https://github.com/tenntenn/golden/pull/19
 
