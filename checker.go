@@ -99,6 +99,8 @@ func (c *Checker) Check(suffix string, data any) (diff string) {
 }
 
 func (c *Checker) isJSON(s string) bool {
+	c.testingT.Helper()
+
 	var v any
 	err := json.NewDecoder(strings.NewReader(s)).Decode(&v)
 
@@ -122,6 +124,7 @@ func (c *Checker) isJSON(s string) bool {
 
 func (c *Checker) isBytes(v any) bool {
 	c.testingT.Helper()
+
 	_, ok := v.([]byte)
 	return ok
 }
