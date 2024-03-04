@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.5.3](https://github.com/tenntenn/golden/compare/v0.5.2...v0.5.3) - 2024-03-04
+- Support for comparison with JSON acquired with []byte type by @k1LoW in https://github.com/tenntenn/golden/pull/19
+
 ## [v0.5.2](https://github.com/tenntenn/golden/compare/v0.5.1...v0.5.2) - 2024-03-01
 - If a character that is determined to be a number is at the beginning, it is not determined to be JSON. by @k1LoW in https://github.com/tenntenn/golden/pull/16
 - Resolve tennvet errors by @k1LoW in https://github.com/tenntenn/golden/pull/18
