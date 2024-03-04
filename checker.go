@@ -77,7 +77,7 @@ func (c *Checker) Check(suffix string, data any) (diff string) {
 	defer golden.Close()
 
 	wantStr := readAll(c.testingT, c.JSONIdent, golden)
-	if !c.isJSON(wantStr) {
+	if c.isBytes(data) || !c.isJSON(wantStr) {
 		gotStr := readAll(c.testingT, c.JSONIdent, data)
 		return cmp.Diff(wantStr, gotStr, c.opts...)
 	}
@@ -118,6 +118,12 @@ func (c *Checker) isJSON(s string) bool {
 	}
 
 	return true
+}
+
+func (c *Checker) isBytes(v any) bool {
+	c.testingT.Helper()
+	_, ok := v.([]byte)
+	return ok
 }
 
 func (c *Checker) updateFile(path string, data any) {
