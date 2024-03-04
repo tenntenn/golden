@@ -130,8 +130,9 @@ func (c *Checker) isBytesOrString(v any) bool {
 		return true
 	case string:
 		return true
+	default:
+		return false
 	}
-	return false
 }
 
 func (c *Checker) updateFile(path string, data any) {
