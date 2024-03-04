@@ -27,6 +27,7 @@ func TestChecker_Check(t *testing.T) {
 		"json-nodiff":                      {"{\"S\":\"hello\"}\n", struct{ S string }{S: "hello"}, false, nil},
 		"marshaler-nodiff":                 {"hello", marshaler("hello"), false, nil},
 		"bytes-json-nodiff":                {"{\"S\":\"hello\"}\n", []byte("{\"S\":\"hello\"}\n"), false, nil},
+		"string-json-nodiff":               {"{\"S\":\"hello\"}\n", "{\"S\":\"hello\"}\n", false, nil},
 		"ignore-field-nodiff":              {`{"N":100, "M":200}`, &T{N: 100, M: 300}, false, []cmp.Option{cmpopts.IgnoreFields(T{}, "M")}},
 		"ignore-inner-struct-field-nodiff": {`[{"N":100, "M":200}]`, []*T{{N: 100, M: 300}}, false, []cmp.Option{cmpopts.IgnoreFields(T{}, "M")}},
 
@@ -36,6 +37,7 @@ func TestChecker_Check(t *testing.T) {
 		"json-diff":                      {"{\"S\":\"Hello\"}\n", struct{ S string }{S: "hello"}, true, nil},
 		"marshaler-diff":                 {"Hello", marshaler("hello"), true, nil},
 		"bytes-json-diff":                {"{\"S\":\"Hello\"}\n", []byte("{\"S\":\"hello\"}\n"), true, nil},
+		"string-json-diff":               {"{\"S\":\"Hello\"}\n", "{\"S\":\"hello\"}\n", true, nil},
 		"ignore-field-diff":              {`{"N":100, "M":200}`, &T{N: 100, M: 300}, true, nil},
 		"ignore-inner-struct-field-diff": {`[{"N":100, "M":200}]`, []*T{{N: 100, M: 300}}, true, nil},
 	}
