@@ -45,7 +45,7 @@ func New(t TestingT, update bool, testdata, name string, opts ...cmp.Option) *Ch
 }
 
 // Check do a golden file test for a single data.
-// Check calls [Check] function with test name which combiend with suffix.
+// Check calls [Check] function with test name which combined with suffix.
 //
 //	var flagUpdate bool
 //
