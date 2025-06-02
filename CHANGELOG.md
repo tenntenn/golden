@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.5.5](https://github.com/tenntenn/golden/compare/v0.5.4...v0.5.5) - 2025-06-02
+- fix typo by @matsuyoshi30 in https://github.com/tenntenn/golden/pull/25
+- Update go1.23.9 by @tenntenn in https://github.com/tenntenn/golden/pull/28
+- Udpate workflow by @tenntenn in https://github.com/tenntenn/golden/pull/29
+- Update dependencies by @tenntenn in https://github.com/tenntenn/golden/pull/30
+- Add dependabot by @tenntenn in https://github.com/tenntenn/golden/pull/31
+
 ## [v0.5.4](https://github.com/tenntenn/golden/compare/v0.5.3...v0.5.4) - 2024-03-04
 - isJSON is test helper by @k1LoW in https://github.com/tenntenn/golden/pull/21
 - If a string to be interpreted as JSON begins with a number, it is not considered JSON. by @k1LoW in https://github.com/tenntenn/golden/pull/22
